@@ -13,6 +13,16 @@ pretty_print_file() {
   echo -e "File: $filename"
   echo "$highlighted_content"
   ./pretty_print.py "$filename"
+
+# Check the exit status of the script
+  if [ $? -eq 1 ]; then
+      cat "$filename"
+      echo
+      echo "**********"
+      echo "An error occurred while executing pretty_print.py."
+      echo "Displayed file contents using 'cat' command:"
+      echo "**********"
+  fi
   echo
   echo "----------------------------------------"
 }
@@ -23,7 +33,7 @@ search_files() {
   local root_dir="$2"
 
   # Find files with matching content using grep
-  files=$(grep -rl --include "*.txt" "$search_phrase" "$root_dir")
+  files=$(grep -rli --include "*.txt" "$search_phrase" "$root_dir")
 
   if [ -z "$files" ]; then
     echo "No files found with matching content."
@@ -36,11 +46,30 @@ search_files() {
   done
 }
 
-# Read the root directory from user
-echo "Enter the root directory:"
-read root_dir
-echo $root_dir
-# Loop until "quit" is entered
+if [ $# -eq 0 ]; then
+    echo "Error: Root directory argument is missing."
+    echo "Usage: $0 <root_directory>"
+    exit 1
+fi
+
+# Assign the root directory argument to a variable
+root_dir="$1"
+
+# Check if the root directory exists
+if [ ! -e "$root_dir" ]; then
+    echo "The specified directory does not exist."
+    exit 1
+fi
+
+# Check if the root directory is a directory
+if [ ! -d "$root_dir" ]; then
+    echo "The specified path is not a directory."
+    exit 1
+fi
+
+# Continue with further processing if the checks pass
+echo "Root directory: $root_dir"
+
 while true; do
   # Read input from user
   echo "Enter a search phrase (or 'quit' to exit):"
