@@ -16,8 +16,7 @@ class ExpressionType(Enum):
     QuestionFalse = "0"
 
 
-RESET = "\033[0m"
-
+COLOR_ESCAPE = "\033[0m"
 ExpressionColoring: Dict[ExpressionType, str] = {
     ExpressionType.Header: "\033[1;37;40m",
     ExpressionType.Descriptor: "\033[1;34;40m",
@@ -50,7 +49,7 @@ def parse_question(path: Path) -> Dict[ExpressionType, str]:
 
 def pretty_print_question(question: List[Dict[ExpressionType, str]]):
     for truth_value, answer in question:
-        print(rf"{ExpressionColoring[truth_value]}{answer}{RESET}")
+        print(rf"{ExpressionColoring[truth_value]}{answer}{COLOR_ESCAPE}")
 
 
 if __name__ == "__main__":
