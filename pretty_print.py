@@ -34,8 +34,7 @@ def parse_question_from_string(raw_question: str) -> List[Tuple[ExpressionType, 
     match = re.match(HEADER_REGEX_PATTERN, header)
 
     header = "H" + header
-
-    if not match or len(lines[0]) != len(lines):
+    if not match or len(header) != len(lines):
         return None
 
     return [(ExpressionType(token), line) for token, line in zip(header, lines)]
@@ -55,9 +54,7 @@ def pretty_print_question(question: Optional[List[Dict[ExpressionType, str]]]):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: pretty_print.py <path_to_question>")
-        exit(1)
+
     path = Path(sys.argv[1])
     question = parse_question(path)
     pretty_print_question(question)
